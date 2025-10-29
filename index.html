@@ -25,7 +25,7 @@
       backdrop-filter: blur(10px);
       box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
       text-align: center;
-      animation: fadeIn 2s ease-in-out;
+      animation: fadeIn 1.5s ease-in-out;
     }
 
     h1 {
@@ -33,12 +33,19 @@
       margin-bottom: 20px;
       color: #c9a0ff;
       text-shadow: 0 0 10px #8a2be2;
+      transition: opacity 0.5s ease-in-out;
     }
 
     #countdown {
       font-size: 2em;
       letter-spacing: 2px;
       margin-top: 10px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    #countdown.show {
+      opacity: 1;
     }
 
     select {
@@ -100,13 +107,17 @@
       if (fechas[selected]) {
         target = fechas[selected];
         title.textContent = target.texto;
+        countdown.classList.remove("show");
+        setTimeout(() => {
+          countdown.classList.add("show");
+        }, 300);
       } else {
-        countdown.innerHTML = "Evento no disponible";
-        title.textContent = "⚠️ Error";
+        title.textContent = "⚠️ Evento no disponible";
+        countdown.innerHTML = "";
       }
     });
 
-    setInterval(() => {
+    function updateCountdown() {
       if (!target || !target.fecha) {
         countdown.innerHTML = "Evento no disponible";
         return;
@@ -126,10 +137,11 @@
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }, 1000);
+      countdown.classList.add("show");
+    }
+
+    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
-
-      countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds
 
