@@ -80,33 +80,56 @@
 
     const fechas = {
       navidad: {
-        fecha: new Date("December 25, 2025 00:00:00"),
+        fecha: new Date("2025-12-25T00:00:00"),
         texto: "🎄 Navidad en..."
       },
       anoNuevo: {
-        fecha: new Date("January 1, 2026 00:00:00"),
+        fecha: new Date("2026-01-01T00:00:00"),
         texto: "🎆 Año Nuevo en..."
       },
       cumple: {
-        fecha: new Date("March 14, 2026 00:00:00"),
+        fecha: new Date("2026-03-14T00:00:00"),
         texto: "🎂 Cumpleaños en..."
       }
     };
 
-    let target = fechas.navidad;
+    let target = fechas["navidad"];
 
     selector.addEventListener("change", () => {
-      target = fechas[selector.value];
-      title.textContent = target.texto;
+      const selected = selector.value;
+      if (fechas[selected]) {
+        target = fechas[selected];
+        title.textContent = target.texto;
+      } else {
+        countdown.innerHTML = "Evento no disponible";
+        title.textContent = "⚠️ Error";
+      }
     });
 
     setInterval(() => {
+      if (!target || !target.fecha) {
+        countdown.innerHTML = "Evento no disponible";
+        return;
+      }
+
       const now = new Date().getTime();
       const distance = target.fecha.getTime() - now;
+
+      if (distance < 0) {
+        countdown.innerHTML = "¡Ya llegó!";
+        return;
+      }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+      countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
+  </script>
+</body>
+</html>
+
       countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds
+
